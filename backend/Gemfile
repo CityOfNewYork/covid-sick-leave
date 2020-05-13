@@ -1,0 +1,46 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.5.7'
+
+# Publish SNS messages
+gem 'aws-sdk-sns', '~> 1.1.0'
+# Decrypt KMS keys
+gem 'aws-sdk-kms', '~> 1.11.0'
+# Send emails with SES
+gem 'aws-sdk-ses', '~> 1.6.0'
+# Manage environment with .env file
+gem 'dotenv', '~> 2.1.1'
+# PDF merger
+gem 'combine_pdf', '~> 1.0', '>= 1.0.14'
+# Use parallel to parallelize network calls and CPU operations
+gem 'parallel', '~> 1.6.1'
+# PDF parse into form
+gem 'pdf-forms', '~> 1.1', '>= 1.1.1'
+# Add PNG, JPEG and Other images to PDF
+gem 'prawn', '~> 2.1'
+# Manipulate png uploads
+gem 'chunky_png', '~> 1.3.5'
+# Use httparty for requests
+gem 'httparty', '~> 0.16.2'
+# Use active support for its rails libraries
+gem 'activesupport', '~> 5.2.1'
+# PDF parse into form toolkit
+gem 'pdf-toolkit', '~> 1.1.0'
+# For MySQL DB access
+gem 'mysql2', '~> 0.5.2'
+# For attachment documents to emails
+gem 'mime', '~> 0.4.4'
+
+gem 'rspec', '~> 3.5.0'
+
+gem 'google-api-client', '~> 0.38.0'
+
+group :test do
+    gem 'pry', '~> 0.12.2'
+    gem 'simplecov', '~> 0.16.1'
+    gem 'simplecov-console', '~> 0.4.1'
+    gem 'webmock', '~> 2.1'
+end

@@ -1,0 +1,24 @@
+.DS_Store
+
+# Ignore bundler config.
+**/.bundle
+
+# The environment variables
+.env
+**/.env
+
+# Ignore lambda gems
+**/vendor
+
+# Ignore test coverage
+**/coverage
+
+# Ignore deploy zip file
+deploy
+deploy.zip
+*.zip
+
+**/credentials.json
+**/token.yaml
+
+backend/constants/*
