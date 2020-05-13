@@ -22,15 +22,15 @@ the -v flag tells docker to place files from our local environment into docker c
 the --rm flag tells docker to remove the container the container it creates on 'run'
 
 ```
-docker build . -t covid-sick-leave
-docker run --rm -v $(pwd):/var/task -t covid-sick-leave:latest bash scripts/vendor.sh
+docker build . -t covid-paid-leave
+docker run --rm -v $(pwd):/var/task -t covid-paid-leave:latest bash scripts/vendor.sh
 ```
 
 Once the container is built and dependencies installed, you can do the following:
 
 ### Deploy:
 ```
-    docker run --rm -v $(pwd):/var/task -t covid-sick-leave:latest bash scripts/zip.sh
+    docker run --rm -v $(pwd):/var/task -t covid-paid-leave:latest bash scripts/zip.sh
     # should produce a local deploy.zip file
     # upload that file to lambda to LATEST ALIAS
     # test LATEST, publish new version, and point production to that version
