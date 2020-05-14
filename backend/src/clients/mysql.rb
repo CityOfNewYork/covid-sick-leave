@@ -2,7 +2,6 @@ require 'date'
 require 'mysql2'
 
 require './src/logger'
-require './src/errors'
 
 class MySQL
     SECS_PER_DAY = 60*60*24

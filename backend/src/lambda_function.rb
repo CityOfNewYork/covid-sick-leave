@@ -51,11 +51,6 @@ module LambdaFunctions
                 verify_formstack_webhook(event)
                 COVIDHandler.new(JSON.parse(event["body"]), ses, db).process
 
-            rescue ForbiddenError => err
-                Logger.error("msg: #{err}, trace: #{err.backtrace.join("\n")}")
-                sns.publish("Online Apps Error", "msg: #{err}, event: #{event}")
-                api_gateway_resp(statusCode: 403, body: {"error": err})
-
             rescue StandardError => err
                 Logger.error("msg: #{err}, trace: #{err.backtrace.join("\n")}")
                 sns.publish("Online Apps Error", "msg: #{err}, event: #{event}")
@@ -63,10 +58,10 @@ module LambdaFunctions
 
             else
                 api_gateway_resp(statusCode: 204)
+            end
 
         end
         # :nocov:
     end
 end
-
 

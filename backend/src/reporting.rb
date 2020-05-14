@@ -8,7 +8,6 @@ require 'fileutils'
 
 require './src/clients/mysql'
 require './src/clients/sheets'
-require './src/errors'
 require './src/logger'
 require './src/util'
 

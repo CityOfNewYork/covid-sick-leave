@@ -8,7 +8,8 @@ Create .env file, and copy contents of .env.sample. Required keys can be set as 
 
 Database: see Keypass file on share drive
 Google sheet: see "authorize" function in src/clients/sheets.rb, or obtain from team member
-Formstack: obtain from team member
+FORMSTACK_HMAC_KEY: obtain from team member
+DOCUMENT_PASSWORD: make it something complex that won't be guessed by people receiving the documents (13+ characters incl. numbers and special characters)
 
 ## Architecture
 

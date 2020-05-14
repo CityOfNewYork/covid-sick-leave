@@ -64,19 +64,14 @@ class SES
 
 
 	def send(subject, textbody, htmlbody, recipient, attachments: nil, sendername: nil)
-		# Try to send the email.
-		# begin
-
-		# Provide the contents of the email.
-		resp = @client.send_raw_email({
-		  raw_message: {
-		    data: get_msg(subject, textbody, htmlbody, recipient, attachments, sendername).to_s
-		  }
-		})
-
-		# If the message was not sent, show a message explaining what went wrong.
-		# rescue Aws::SES::Errors::ServiceError => error
-		#   Logger.error("Document receipt email not sent. Error message: #{error}")
-		# end
+		begin
+			resp = @client.send_raw_email({
+			  raw_message: {
+			    data: get_msg(subject, textbody, htmlbody, recipient, attachments, sendername).to_s
+			  }
+			})
+		rescue Aws::SES::Errors::ServiceError => error
+		  Logger.error("Document receipt email not sent. Error message: #{error}")
+		end
 	end
 end
