@@ -152,12 +152,14 @@ class COVIDHandler
                 "Sincerely,<br>" + 
                 "NYC Department of Health and Mental Hygiene"
         end
+        # TODO: remove conditional logic when we get the OK to send positive diagnosis verification letters
+        attachments = @submission[@diagnosed_key]["value"] == "No" ? [@verification_output_path, @standing_order_output_path] : [@standing_order_output_path]
         @ses.send(
             "Paid Leave Verification Document", 
             text,
             html, 
             to_addr,
-            attachments: [@verification_output_path, @standing_order_output_path],
+            attachments: attachments,
             sendername: ENV.fetch("FROM_ADDR_NAME", "NYC Department of Health and Mental Hygiene")
         )
         if not ENV.fetch("TENANCY") == "staging"
