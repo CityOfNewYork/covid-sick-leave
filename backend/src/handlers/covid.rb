@@ -15,6 +15,7 @@ class COVIDHandler
         @standing_order_template_path = "./constants/dohmh_standing_order_05_14_20.pdf"
         @symptom_verification_template_path = "./constants/covid_template_04_15_20.pdf"
         @positive_verification_template_path = "./constants/covid_template_positive_04_15_20.pdf"
+        @fact_sheet_path = "./constants/paid_leave_factsheet.pdf"
         @output_folder = "/tmp"
 
         @submission_id_key = "UniqueID"
@@ -44,7 +45,7 @@ class COVIDHandler
 
         @verification_output_path = "#{@output_folder}/#{@submission[@submission_id_key]}/nyc_paidleave_letter.pdf"
         @tmp_verification_output_path = "#{@output_folder}/#{@submission[@submission_id_key]}/nyc_paidleave_letter_tmp.pdf"
-        @standing_order_output_path = "#{@output_folder}/#{@submission[@submission_id_key]}/dohmh_standing_order.pdf"
+        @standing_order_output_path = "#{@output_folder}/#{@submission[@submission_id_key]}/dohmh_isolation_order.pdf"
 
         @pdftk = PdfForms.new
         @ses = ses
@@ -67,7 +68,7 @@ class COVIDHandler
         category_keys_map = {
             "Non-essential Worker" => {
                 "NonEssential-Fullname" => @full_name,
-                "NonEssential-TodayDate" => @todays_date,
+                "NonEssential-TodayDate" => @submission[@symptom_start_key]["value"],
 
                 # reason fields
                 "NonEssential-TestedCheckbox" => @submission[@diagnosed_key]["value"] == "Yes" ? "On" : "",
@@ -76,7 +77,7 @@ class COVIDHandler
             },
             "Healthcare Worker" => {
                 "Healthcare-Fullname" => @full_name,
-                "Healthcare-TodayDate" => @todays_date,
+                "Healthcare-TodayDate" => @submission[@symptom_start_key]["value"],
 
                 # question (1) fields
                 "Healthcare-TestedCheckbox" => @submission[@diagnosed_key]["value"] == "Yes" ? "On" : "",
@@ -98,7 +99,7 @@ class COVIDHandler
             },
             "Essential Worker" => {
                 "Essential-Fullname" => @full_name,
-                "Essential-TodayDate" => @todays_date,
+                "Essential-TodayDate" => @submission[@symptom_start_key]["value"],
 
                 # question (1) fields
                 "Essential-TestedCheckbox" => @submission[@diagnosed_key]["value"] == "Yes" ? "On" : "",
@@ -122,6 +123,14 @@ class COVIDHandler
         @pdftk.fill_form @standing_order_template_path, @standing_order_output_path, category_keys_map[@submission[@worker_category]["value"]]
     end
 
+    def get_attachment_paths()
+        if @submission[@diagnosed_key]["value"] == "No"
+            [@verification_output_path, @standing_order_output_path, @fact_sheet_path]
+        else
+            [@standing_order_output_path, @fact_sheet_path]
+        end
+    end
+
     def email_documents()
         text = nil
         html = nil
@@ -130,12 +139,11 @@ class COVIDHandler
         if should_email
             to_addr = @submission[@patient_email_key]["value"]
 
-            text = "Dear #{@full_name},\n\nPlease see attached a document known as the standing order allowing you to use paid sick leave at this time. Please fill out Appendix B or Appendix C depending on the type of business you work for and show this document to your employer as well as any other documentation attached to this email or your covid test results if you have them.\n\nMore information is available on the Department of Health and Mental Hygiene's FAQ page: #{@faq_link}\n\nNothing in this email shall preclude a hospital or other healthcare provider from requiring that its employees provide additional documentation or information that confirms the need for the self-quarantine to its office of occupational health services or as otherwise directed.\n\nSincerely,\nNYC Department of Health and Mental Hygiene"
+            text = "Dear #{@full_name},\n\nPlease see attached: a document known as the Isolation Order allowing you to use paid sick leave at this time. Please sign and date Appendix A, B or C (one will be already filled out for you). There is also a “fact sheet” attached with information about what documents to submit to your employer.\n\nMore information is available on the Department of Health and Mental Hygiene's FAQ page: #{@faq_link}\n\nSincerely,\nNYC Department of Health and Mental Hygiene"
 
             html = "Dear #{@full_name},<br><br>" +
-                "Please see attached a document known as the standing order allowing you to use paid sick leave at this time. Please fill out Appendix B or Appendix C depending on the type of business you work for and show this document to your employer as well as any other documentation attached to this email or your COVID-19 test results if you have them.<br><br>" +
+                "Please see attached: a document known as the Isolation Order allowing you to use paid sick leave at this time. Please sign and date Appendix A, B or C (one will be already filled out for you). There is also a “fact sheet” attached with information about what documents to submit to your employer.<br><br>" +
                 "More information is available on the Department of Health and Mental Hygiene's FAQ page: #{@faq_link}<br><br>" +
-                "Nothing in this email shall preclude a hospital or other healthcare provider from requiring that its employees provide additional documentation or information that confirms the need for the self-quarantine to its office of occupational health services or as otherwise directed.<br><br>" +
                 "Sincerely,<br>" +
                 "NYC Department of Health and Mental Hygiene<br>"
 
@@ -152,14 +160,12 @@ class COVIDHandler
                 "Sincerely,<br>" + 
                 "NYC Department of Health and Mental Hygiene"
         end
-        # TODO: remove conditional logic when we get the OK to send positive diagnosis verification letters
-        attachments = @submission[@diagnosed_key]["value"] == "No" ? [@verification_output_path, @standing_order_output_path] : [@standing_order_output_path]
         @ses.send(
             "Paid Leave Verification Document", 
             text,
             html, 
             to_addr,
-            attachments: attachments,
+            attachments: get_attachment_paths(),
             sendername: ENV.fetch("FROM_ADDR_NAME", "NYC Department of Health and Mental Hygiene")
         )
         if not ENV.fetch("TENANCY") == "staging"
