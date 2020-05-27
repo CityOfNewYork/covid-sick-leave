@@ -26,7 +26,7 @@ gem 'chunky_png', '~> 1.3.5'
 # Use httparty for requests
 gem 'httparty', '~> 0.16.2'
 # Use active support for its rails libraries
-gem 'activesupport', '~> 5.2.1'
+gem 'activesupport', '~> 5.2.4'
 # PDF parse into form toolkit
 gem 'pdf-toolkit', '~> 1.1.0'
 # For MySQL DB access
