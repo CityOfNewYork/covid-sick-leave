@@ -10,7 +10,7 @@
         background:url(https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif) top center no-repeat;
       }
     </style>
-    <title>Quarantine Order</title>
+    <title>QUARANTINE ORDER</title>
   </head>
   <body>
     <header class="o-header w-full">
@@ -18,7 +18,7 @@
         <svg class="icon icon-8" viewBox="0 0 350 117" xmlns="http://www.w3.org/2000/svg">
           <path d="M327.9,0 L255,0 L233.2,21.9 L233.2,94.7 L255,116.6 L327.9,116.6 L349.7,94.7 L349.7,72.9 L342.5,65.6 L306,65.6 L306,72.9 L276.9,72.9 L276.9,43.7 L306,43.7 L306,50.9 L342.5,50.9 L349.7,43.7 L349.7,21.9 L327.9,0 Z M109.3,0 L80.1,0 L72.9,7.3 L72.9,36.4 L36.4,0 L7.3,0 L0,7.3 L0,109.3 L7.3,116.6 L36.4,116.6 L43.7,109.3 L43.7,80.1 L80.1,116.6 L109.3,116.6 L116.6,109.3 L116.6,7.3 L109.3,0 Z M160.3,116.6 L189.4,116.6 L196.7,109.3 L196.7,87.4 L233.2,51 L233.2,7.3 L225.9,0 L196.7,0 L189.4,7.3 L189.4,21.9 L174.9,36.4 L160.3,21.9 L160.3,7.3 L153,0 L123.9,0 L116.6,7.3 L116.6,51 L153,87.4 L153,109.3 L160.3,116.6 Z" fill="currentColor" fill-rule="nonzero"></path>
         </svg>
-        <h1 class="o-header__main-title">Quarantine Order</h1>
+        <h1 class="o-header__main-title">QUARANTINE ORDER</h1>
         <svg class="icon icon-8 text-blue" viewBox="0 0 350 117" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M327.9,0 L255,0 L233.2,21.9 L233.2,94.7 L255,116.6 L327.9,116.6 L349.7,94.7 L349.7,72.9 L342.5,65.6 L306,65.6 L306,72.9 L276.9,72.9 L276.9,43.7 L306,43.7 L306,50.9 L342.5,50.9 L349.7,43.7 L349.7,21.9 L327.9,0 Z M109.3,0 L80.1,0 L72.9,7.3 L72.9,36.4 L36.4,0 L7.3,0 L0,7.3 L0,109.3 L7.3,116.6 L36.4,116.6 L43.7,109.3 L43.7,80.1 L80.1,116.6 L109.3,116.6 L116.6,109.3 L116.6,7.3 L109.3,0 Z M160.3,116.6 L189.4,116.6 L196.7,109.3 L196.7,87.4 L233.2,51 L233.2,7.3 L225.9,0 L196.7,0 L189.4,7.3 L189.4,21.9 L174.9,36.4 L160.3,21.9 L160.3,7.3 L153,0 L123.9,0 L116.6,7.3 L116.6,51 L153,87.4 L153,109.3 L160.3,116.6 Z" fill="currentColor" fill-rule="nonzero"></path>
         </svg>
@@ -68,6 +68,8 @@
           </div>
         </div>
         <script>
+        var isolationMessage = "<div><p>Attention: based on your answers, this caller needs an isolation order instead of a quarantine order. You can complete the isolation order on the <a href='https://bit.ly/isolationorder'>Covid Isolation Order Form<a>.</p></div>"
+        var quarantineIframe = `<div class="iframe"><iframe src="https://nycopportunity.formstack.com/forms/covid_precautionary_quarantine_stg" title="covid" width="600" height="2355" frameBorder="0"></iframe></div>`
 
         function chooseForm(e){
           e.preventDefault();
@@ -75,12 +77,10 @@
           var optionTwo = document.getElementById('option-2').checked
           var optionThree = document.getElementById('option-3').checked
           var optionFour = document.getElementById('option-4').checked
-          var isolationIframe = `<div class="iframe"><iframe src="https://nycopportunity.formstack.com/forms/covid_stg" title="covid" width="600" height="2435" frameBorder="0"></iframe></div>`
-          var quarantineIframe = `<div class="iframe"><iframe src="https://nycopportunity.formstack.com/forms/covid_precautionary_quarantine_stg" title="covid" width="600" height="2435" frameBorder="0"></iframe></div>`
 
           if (optionOne || optionThree) {
             // show Isolation form
-            document.getElementById('formstack-iframe').innerHTML = isolationIframe;
+            document.getElementById('formstack-iframe').innerHTML = isolationMessage;
             document.getElementById("chooseForm").outerHTML = "";
           } else if (optionTwo && optionFour) {
             // show Quarantine form
@@ -92,6 +92,5 @@
           }
         }
         </script>
-
   </body>
 </html>
