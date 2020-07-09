@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/gh/cityofnewyork/nyco-patterns@v2.3.1/dist/styles/nyco-patterns-default.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/cityofnewyork/nyco-patterns@v2.3.1/dist/images/favicon/favicon.ico" rel="shortcut icon">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <style>
+      .iframe{
+        background:url(https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif) top center no-repeat;
+      }
+    </style>
+    <title>QUARANTINE ORDER</title>
+  </head>
+  <body>
+    <header class="o-header w-full">
+      <div class="color-primary-button w-full flex items-center py-1 px-2 justify-between">
+        <svg class="icon icon-8" viewBox="0 0 350 117" xmlns="http://www.w3.org/2000/svg">
+          <path d="M327.9,0 L255,0 L233.2,21.9 L233.2,94.7 L255,116.6 L327.9,116.6 L349.7,94.7 L349.7,72.9 L342.5,65.6 L306,65.6 L306,72.9 L276.9,72.9 L276.9,43.7 L306,43.7 L306,50.9 L342.5,50.9 L349.7,43.7 L349.7,21.9 L327.9,0 Z M109.3,0 L80.1,0 L72.9,7.3 L72.9,36.4 L36.4,0 L7.3,0 L0,7.3 L0,109.3 L7.3,116.6 L36.4,116.6 L43.7,109.3 L43.7,80.1 L80.1,116.6 L109.3,116.6 L116.6,109.3 L116.6,7.3 L109.3,0 Z M160.3,116.6 L189.4,116.6 L196.7,109.3 L196.7,87.4 L233.2,51 L233.2,7.3 L225.9,0 L196.7,0 L189.4,7.3 L189.4,21.9 L174.9,36.4 L160.3,21.9 L160.3,7.3 L153,0 L123.9,0 L116.6,7.3 L116.6,51 L153,87.4 L153,109.3 L160.3,116.6 Z" fill="currentColor" fill-rule="nonzero"></path>
+        </svg>
+        <h1 class="o-header__main-title">QUARANTINE ORDER</h1>
+        <svg class="icon icon-8 text-blue" viewBox="0 0 350 117" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M327.9,0 L255,0 L233.2,21.9 L233.2,94.7 L255,116.6 L327.9,116.6 L349.7,94.7 L349.7,72.9 L342.5,65.6 L306,65.6 L306,72.9 L276.9,72.9 L276.9,43.7 L306,43.7 L306,50.9 L342.5,50.9 L349.7,43.7 L349.7,21.9 L327.9,0 Z M109.3,0 L80.1,0 L72.9,7.3 L72.9,36.4 L36.4,0 L7.3,0 L0,7.3 L0,109.3 L7.3,116.6 L36.4,116.6 L43.7,109.3 L43.7,80.1 L80.1,116.6 L109.3,116.6 L116.6,109.3 L116.6,7.3 L109.3,0 Z M160.3,116.6 L189.4,116.6 L196.7,109.3 L196.7,87.4 L233.2,51 L233.2,7.3 L225.9,0 L196.7,0 L189.4,7.3 L189.4,21.9 L174.9,36.4 L160.3,21.9 L160.3,7.3 L153,0 L123.9,0 L116.6,7.3 L116.6,51 L153,87.4 L153,109.3 L160.3,116.6 Z" fill="currentColor" fill-rule="nonzero"></path>
+        </svg>
+      </div>
+    </header>
+    <div class="bg-secondary-white-50t mb-6 p-4 screen-desktop:p-6">
+          <div class="layout-wrap mx-auto flex justify-center">
+              <div class="bg-base-white mx-auto text-center">
+                <article class="o-content color-light-background p-4 max-w-900">
+                  <form id="chooseForm" class="pl-4 mb-1 border" style="border-color:rgb(99,123,159);min-width:600px;" onsubmit="chooseForm(event)">
+                    <div class="fieldset-content text-left">
+                      <fieldset>
+                        <legend class="w-full mb-1" style="font-family:Noto Sans;font-size:28px;">
+                          <span>Has caller had any symptoms of Covid?</span><span style="color:red">*</span>
+                        </legend>
+                        <label class="radio" for="option-1">
+                          <input id="option-1" name="options" type="radio" value="option-1" required/>
+                          <span class="radio__label">Yes</span>
+                        </label>
+                        <label class="radio" for="option-2">
+                          <input id="option-2" name="options" type="radio" value="option-2" />
+                          <span class="radio__label">No</span>
+                        </label>
+                      </fieldset>
+                      <fieldset>
+                        <legend class="w-full mb-1" style="font-family:Noto Sans;font-size:28px;">
+                          <span>Did caller test positive for Covid?</span><span style="color:red">*</span>
+                        </legend>
+                        <label class="radio" for="option-3">
+                          <input id="option-3" name="optionss" type="radio" value="option-3" required/>
+                          <span class="radio__label">Yes</span>
+                        </label>
+                        <label class="radio" for="option-4">
+                          <input id="option-4" name="optionss" type="radio" value="option-4" />
+                          <span class="radio__label">No</span>
+                        </label>
+                      </fieldset>
+                    </div>
+                    <div>
+                      <button class="btn color-primary-button mb-2" type="submit">Submit</button>
+                    </div>
+                  </form>
+                  <div id="formstack-iframe"></div>
+
+                </article>
+              </div>
+          </div>
+        </div>
+        <script>
+        var isolationMessage = "<div><p>Attention: based on your answers, this caller needs an isolation order instead of a quarantine order. You can complete the isolation order on the <a href='https://bit.ly/isolationorder'>Covid Isolation Order Form<a>.</p></div>"
+        var quarantineIframe = `<div class="iframe"><iframe src="https://nycopportunity.formstack.com/forms/covid_precautionary_quarantine_stg" title="covid" width="600" height="2355" frameBorder="0"></iframe></div>`
+
+        function chooseForm(e){
+          e.preventDefault();
+          var optionOne = document.getElementById('option-1').checked
+          var optionTwo = document.getElementById('option-2').checked
+          var optionThree = document.getElementById('option-3').checked
+          var optionFour = document.getElementById('option-4').checked
+
+          if (optionOne || optionThree) {
+            // show Isolation form
+            document.getElementById('formstack-iframe').innerHTML = isolationMessage;
+            document.getElementById("chooseForm").outerHTML = "";
+          } else if (optionTwo && optionFour) {
+            // show Quarantine form
+            document.getElementById('formstack-iframe').innerHTML = quarantineIframe;
+            document.getElementById("chooseForm").outerHTML = "";
+          } else {
+            // do nothing
+            document.getElementById('formstack-iframe').innerHTML = "";
+          }
+        }
+        </script>
+  </body>
+</html>
