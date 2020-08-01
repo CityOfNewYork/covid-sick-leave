@@ -14,7 +14,7 @@ class COVIDHandler
         @faq_link = ENV.fetch("FAQ_LINK", "https://www1.nyc.gov/assets/doh/downloads/pdf/imm/covid-19-paid-sick-leave-order-faq.pdf")
         @standing_order_template_path = "./constants/dohmh_standing_order_05_14_20.pdf"
         @symptom_verification_template_path = "./constants/covid_template_04_15_20.pdf"
-        @positive_verification_template_path = "./constants/covid_template_positive_04_15_20.pdf"
+        @positive_verification_template_path = "./constants/covid_template_positive_05_26_20.pdf"
         @fact_sheet_path = "./constants/paid_leave_factsheet.pdf"
         @output_folder = "/tmp"
 
@@ -25,6 +25,7 @@ class COVIDHandler
         @patient_address_key = ENV.fetch("PATIENT_ADDRESS_KEY", "91060601")
         @staff_email_key = ENV.fetch("STAFF_EMAIL_KEY", "91060610")
         @symptom_start_key = ENV.fetch("SYMPTOMS_STARTED_KEY")
+        @symptom_start_optional_key = ENV.fetch("SYMPTOMS_STARTED_OPTIONAL_KEY")
         @diagnosed_key = ENV.fetch("DIAGNOSED_KEY")
 
         @date_of_test_key = ENV.fetch("DATE_OF_TEST", "92571758")
@@ -52,23 +53,43 @@ class COVIDHandler
         @db = db
 	end
 
-    def fill_verification_letter()
+    def fill_negative_verification_letter()
         verification_pdf_key_map = {
             "Fullname" => @full_name,
             "Date" => @todays_date,
             "Symptom Start Date" => @submission[@symptom_start_key]["value"]
         }
-        template_path = @submission[@diagnosed_key]["value"] == "Yes" ? @positive_verification_template_path : @symptom_verification_template_path
-        @pdftk.fill_form template_path, @tmp_verification_output_path, verification_pdf_key_map
+        @pdftk.fill_form @symptom_verification_template_path, @tmp_verification_output_path, verification_pdf_key_map
         # Run PDFTK from the OS to protect the document from editing
         `pdftk #{@tmp_verification_output_path} output #{@verification_output_path} owner_pw #{ENV.fetch("DOCUMENT_PASSWORD")} allow printing`
     end
 
+    def fill_positive_verification_letter()
+        verification_pdf_key_map = {
+            "Fullname" => @full_name,
+            "Date" => @todays_date,
+            "Symptom Start Date" => @submission[@symptom_start_optional_key]["value"],
+            "Positive Test Date" => @submission[@date_of_test_key]["value"]
+        }
+        @pdftk.fill_form @positive_verification_template_path, @tmp_verification_output_path, verification_pdf_key_map
+        # Run PDFTK from the OS to protect the document from editing
+        `pdftk #{@tmp_verification_output_path} output #{@verification_output_path} owner_pw #{ENV.fetch("DOCUMENT_PASSWORD")} allow printing`
+    end
+
+    def get_isolation_start_date()
+        if @submission[@diagnosed_key]["value"] == "Yes"
+            @submission[@symptom_start_optional_key]["value"] != "" ? @submission[@symptom_start_optional_key]["value"] : @submission[@date_of_test_key]["value"]
+        else
+            @submission[@symptom_start_key]["value"]
+        end
+    end
+
     def fill_standing_order()
+        isolation_start_date = get_isolation_start_date()
         category_keys_map = {
             "Non-essential Worker" => {
                 "NonEssential-Fullname" => @full_name,
-                "NonEssential-TodayDate" => @submission[@symptom_start_key]["value"],
+                "NonEssential-TodayDate" => isolation_start_date,
 
                 # reason fields
                 "NonEssential-TestedCheckbox" => @submission[@diagnosed_key]["value"] == "Yes" ? "On" : "",
@@ -77,7 +98,7 @@ class COVIDHandler
             },
             "Healthcare Worker" => {
                 "Healthcare-Fullname" => @full_name,
-                "Healthcare-TodayDate" => @submission[@symptom_start_key]["value"],
+                "Healthcare-TodayDate" => isolation_start_date,
 
                 # question (1) fields
                 "Healthcare-TestedCheckbox" => @submission[@diagnosed_key]["value"] == "Yes" ? "On" : "",
@@ -99,7 +120,7 @@ class COVIDHandler
             },
             "Essential Worker" => {
                 "Essential-Fullname" => @full_name,
-                "Essential-TodayDate" => @submission[@symptom_start_key]["value"],
+                "Essential-TodayDate" => isolation_start_date,
 
                 # question (1) fields
                 "Essential-TestedCheckbox" => @submission[@diagnosed_key]["value"] == "Yes" ? "On" : "",
@@ -121,14 +142,6 @@ class COVIDHandler
             }
         }
         @pdftk.fill_form @standing_order_template_path, @standing_order_output_path, category_keys_map[@submission[@worker_category]["value"]]
-    end
-
-    def get_attachment_paths()
-        if @submission[@diagnosed_key]["value"] == "No"
-            [@verification_output_path, @standing_order_output_path, @fact_sheet_path]
-        else
-            [@standing_order_output_path, @fact_sheet_path]
-        end
     end
 
     def email_documents()
@@ -165,7 +178,7 @@ class COVIDHandler
             text,
             html, 
             to_addr,
-            attachments: get_attachment_paths(),
+            attachments: [@verification_output_path, @standing_order_output_path, @fact_sheet_path],
             sendername: ENV.fetch("FROM_ADDR_NAME", "NYC Department of Health and Mental Hygiene")
         )
         if not ENV.fetch("TENANCY") == "staging"
@@ -177,7 +190,11 @@ class COVIDHandler
 
     def process
         create_dir_unless_exists("#{@output_folder}/#{@submission[@submission_id_key]}")
-        fill_verification_letter()
+        if @submission[@diagnosed_key]["value"] == "Yes"
+            fill_positive_verification_letter()
+        else
+            fill_negative_verification_letter()
+        end
         fill_standing_order()
         email_documents()
     end
