@@ -24,7 +24,7 @@ gem 'prawn', '~> 2.1'
 # Manipulate png uploads
 gem 'chunky_png', '~> 1.3.5'
 # Use httparty for requests
-gem 'httparty', '~> 0.16.2'
+gem 'httparty', '~> 0.21.0'
 # Use active support for its rails libraries
 gem 'activesupport', '~> 5.2.1'
 # PDF parse into form toolkit
